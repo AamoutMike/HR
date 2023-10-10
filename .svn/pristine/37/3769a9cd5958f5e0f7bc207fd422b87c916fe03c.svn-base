@@ -1,0 +1,41 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Dapper;
+using Model;
+
+namespace DAO
+{
+    public class CmajorDAO
+    {
+        string conStr = "Data Source=.;Initial Catalog=HR_DB;Integrated Security=True";
+
+        public async Task<IEnumerable<config_major>> MajorSelect()
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(conStr))
+            {
+                string sql = "SELECT * FROM config_major";
+                return await sqlConnection.QueryAsync<config_major>(sql);
+            }
+        }
+
+        public async Task<int> MojorInsert(config_major config_Major)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(conStr)) {
+                string sql = $"INSERT INTO [dbo].[config_major](major_kind_id,major_kind_name,major_id,major_name)VALUES('{config_Major.major_kind_id}','{config_Major.major_kind_name}','{config_Major.major_id}','{config_Major.major_name}')";
+                return await sqlConnection.ExecuteAsync(sql);
+            }
+        }
+
+        public async Task<int> MojorDelete(int id) {
+            using (SqlConnection sqlConnection = new SqlConnection(conStr))
+            {
+                string sql = $"DELETE FROM config_major WHERE mak_id={id}";
+                return await sqlConnection.ExecuteAsync(sql);
+            }
+        }
+    }
+}
